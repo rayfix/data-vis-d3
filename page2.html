@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -7,6 +8,9 @@
   <style>
   .divider{
     margin: 0cm 0cm 1cm 0cm;
+  }
+  .bar {
+    fill: steelblue;
   }
   </style>
 </head>
@@ -37,11 +41,88 @@
 
 <h1>Worldwide CO<sub>2</sub> Emissions</h1>
 
-The emission of global green house gases is a key driver of climate disruption.  These include Methane (CH<sub>4</sub>), Nitrous Oxide(N<sub>2</sub>O), Fluorinated gases and Carbon Dioxide (CO<sub>2</sub>). Each has a different lifetime and produces a different amount of forcing. For this analysis we will focus on CO<sub>2</sub> as the best overall proxy.  Over the past century emissions of CO<sub>2</sub> has been steadily increasing.
+The emission of global green house gases is a key driver of climate disruption.  These include Methane (CH<sub>4</sub>), Nitrous Oxide(N<sub>2</sub>O), Fluorinated gases and Carbon Dioxide (CO<sub>2</sub>). Each has a different lifetime and produces a different amount of forcing. For this analysis, we will focus on CO<sub>2</sub> as the best overall proxy.  Over the past century emissions of CO<sub>2</sub> has been steadily increasing.
 
 </div>
 
+<div class="container text-center">
+<svg width="960" height="500"></svg>
+</div>
 
+<script src="http://d3js.org/d3.v5.min.js"></script>
+<script>
+
+var svg = d3.select("svg")
+var margin = { top: 20, right: 20, bottom: 30, left: 50 }
+var width = svg.attr("width") - margin.left - margin.right
+var height = svg.attr("height") - margin.top - margin.bottom
+
+g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var x = d3.scaleBand()
+  .rangeRound([0, width])
+  .padding(0.1);
+
+var y = d3.scaleLinear()
+  .rangeRound([height, 0]);
+
+d3.csv("co2_total.csv").then(function (data) {
+
+  x.domain(data.map(function (d) { return d.Year; }));
+  y.domain([0, d3.max(data, function(d) { return Number(d.Total_CO2); })]).nice();
+
+  g.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+
+
+  g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(null, "s"))
+    .append("text")
+      .attr("x", 2)
+      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("dy", "2em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .text("CO2 Emissions (kilotons)");
+
+  g.selectAll(".bar")
+  .data(data)
+  .enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", function (d) {
+    return x(d.Year);
+  })
+  .attr("y", function (d) {
+    return y(Number(d.Total_CO2));
+  })
+  .attr("width", x.bandwidth())
+  .attr("height", function (d) {
+    return height - y(Number(d.Total_CO2));
+  });
+});
+
+</script>
+
+<div class="divider"></div>
+
+<div class="container">
+The trend is a monotonic increase in carbon emissions. It is useful to look at what economic regions are generating the emissions.
+
+<div class="divider"></div>
+
+<div class="text-center">
+<h3><a href="page3.html">Emissions by Income Group &gt;&gt;</a></h3>
+</div>
+
+
+<div class="divider"></div>
+
+
+</div>
 
 </body>
 </html>
