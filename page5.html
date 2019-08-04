@@ -38,16 +38,14 @@
 
 <div class="divider"></div>
 <div class="container">
+<h1>Exploring More: Individual Country Contributions</h1>
 
-<h1>CO<sub>2</sub> Emissions by Income Group</h1>
+<div class="container"></div>
 
-
-If we look at the same chart but now distinguish between the income groups
-of countries producing in CO<sub>2</sub> emission there are some interesting
-trends.  You can mouse over the each to see the percentage contribution of
-each income group for a given year.
-
+<p>Looking at carbon emissions by country is useful because country borders, while being human constructs, represent policy boundaries of real consequence.  Use your mouse to discover the contribution of an individual country and click on it to reveal more detail.  You may see if you can find individual countries like China, India, Vietnam, Indonesia and Bangladesh.  They will almost certainly play a critical role in controlling the climate crisis.
 </div>
+
+<div class="container"></div>
 
 <div id="chart" class="container text-center">
   <svg width="960" height="500"></svg>
@@ -75,10 +73,10 @@ var y = d3.scaleLinear()
 
 // set the colors
 var z = d3.scaleOrdinal()
-    .range( ["#E53935","#FFB300","#2196F3","#43A047"] );
+    .range( d3.schemeCategory20 );
 
 // load the csv and create the chart
-d3.csv("co2_income.csv", function(d, i, columns) {
+d3.csv("co2_country.csv", function(d, i, columns) {
   for (i = 1, t = 0; i < columns.length; ++i) 
     t += d[columns[i]] = +d[columns[i]];
     d.total = t;
@@ -86,7 +84,7 @@ d3.csv("co2_income.csv", function(d, i, columns) {
 }, function(error, data) {
   if (error) throw error;
 
-  var keys = ["Low", "LowerMid", "UpperMid", "High"];
+  var keys = data.columns.slice(1);
 
   x.domain(data.map(function(d) { return d.Year; }));
   y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
@@ -130,36 +128,6 @@ d3.csv("co2_income.csv", function(d, i, columns) {
       .attr("text-anchor", "end")
       .attr("transform", "rotate(-90)")
       .text("CO2 Emissions (kilotons)");
-
-  var legend = g.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
-      .attr("text-anchor", "end")
-      .selectAll("g")
-      .data(keys.slice().reverse())
-      .enter().append("g")
-        .attr("transform", function(d, i) { 
-          return "translate(0," + i * 20 + ")"; 
-      });
-
-  legend.append("rect")
-      .attr("x", 140)
-      .attr("width", 19)
-      .attr("height", 19)
-      .attr("fill", z);
-
-  legend.append("text")
-      .attr("x", 130)
-      .attr("y", 9.5)
-      .attr("dy", "0.32em")
-      .text(function(d,i) { 
-        switch (i) {
-          case 0: return "High Income"
-          case 1: return "Higher Mid Income"
-          case 2: return "Lower Mid Income"
-          case 3: return "Low Income"                    
-        }
-      });
 }); // data load complete
 
 var tooltip = svg.append("g")
@@ -181,21 +149,8 @@ tooltip.append("text")
 
 </script>
 
-<div class="container">
-
-The high income countries have had a relatively high but stable output. While economic activity is increasing, these richer nations also are able to implement the use of non-fossil fuel energy sources as well as save on higher efficiency technology.  Low income group nations, on the other hand, produce much smaller amounts of CO<sub>2</sub>.  Where we see the most gains are in middle with the lower-middle income nations and more pronounced int the higher-mid income nations. As we see nations rise out of poverty and become more affluent, carbon output is an expected effect.
-
-</div>
-
+<div class="container"></div>
 <div class="divider"></div>
-
-<div class="text-center">
-<h3><a href="page4.html"> The Argument for a World Carbon Bank &gt;&gt;</a></h3>
-</div>
-
-<div class="divider"></div>
-
-
 </div>
 
 </body>

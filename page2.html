@@ -27,7 +27,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">Credits</a>
+          <a class="nav-link" href="credits.html">Credits</a>
         </li>
       </ul>
     </div>
@@ -73,7 +73,6 @@ d3.csv("co2_total.csv").then(function (data) {
   g.append("g")
   .attr("transform", "translate(0," + height + ")")
   .call(d3.axisBottom(x))
-
 
   g.append("g")
       .attr("class", "axis")

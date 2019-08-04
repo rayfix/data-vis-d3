@@ -9,8 +9,10 @@
   .divider{
     margin: 0cm 0cm 1cm 0cm;
   }
-  .bar {
-    fill: steelblue;
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2px;
   }
   </style>
 </head>
@@ -27,7 +29,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">Credits</a>
+          <a class="nav-link" href="credits.html">Credits</a>
         </li>
       </ul>
     </div>
@@ -36,12 +38,198 @@
 
 <!-- Page Content -->
 
+<div class="divider"></div>
+
 <div class="container">
-  <h1>The Argument for a World Carbon Bank</h1>
+<h1>The Argument for a World Carbon Bank</h1>
 
-<p>The alarm bells on climate are sounding. Here in the US, there is more we can do but our effect will be limited. The last chart shows how developing nations will become the drivers of carbon dioxide emissions. In a recent piece by Kenneth Rogoff, he argues that the World Bank and other multilateral aid institutions are unequipped.</p>
+<div class="divider"></div>
 
+<p>The alarm bells on climate are sounding. Here in the US, there is more we can do but our effect will be limited. The last chart shows how developing nations will become the drivers of carbon dioxide emissions. In a recent piece by Kenneth Rogoff, he argues that the World Bank and other multilateral aid institutions are unequipped.  A World Carbon Bank could address this need by some regions.</p>
+
+<p>To underscore this point, look at carbon emission by region. Instead of stacking them, we show them on the same scale to emphasize the difference between each region.  The regions producing the greatest output need to be assisted, or incentivized to lower emissions.  </p>
 </div>
+
+<div class="container text-center">
+<svg width="960" height="500"></svg>
+</div>
+
+<div class="divider"></div>
+
+<div class="container">
+<h2>How it works</h2>
+
+<p>Burning fossil fuel or releasing any greenhouse gas has an <b><i>external cost</i></b>.  While it might appear free, it, in fact, has large implications and potential economic impact.  As such, it needs to be regulated (aka taxed) to reflect this cost.  A centralized organization such as a World Carbon Bank could manage these regulations and then provide investment particularly to developing nations considered to be in the low income group.</p>
+
+<p>At a time when many nations are concerned about short-term self interest, it may be difficult to enact such a plan.  As we continue to make progress in reducing emissions (despite the current environment) we must realize that is our own best, long-term self interest to implement such a plan and help developing nations shoulder the upfront become carbon neutral on an earlier timescale.</p>
+</div>
+
+
+<div class="divider"></div>
+
+<div class="text-center">
+<h3><a href="page5.html"> Exploring More &gt;&gt;</a></h3>
+</div>
+
+<div class="divider"></div>
+
+<script>
+var svg = d3.select("svg");
+var margin = {top: 20, right: 20, bottom: 30, left: 40}
+var width = svg.attr("width") - margin.left - margin.right;
+var height = svg.attr("height") - margin.top - margin.bottom;
+
+var x = d3.scaleBand()
+  .rangeRound([0, width])
+  .padding(0.1);
+
+var y = d3.scaleLinear()
+  .rangeRound([height, 0]);
+// set the colors
+
+var colorMap = ["#E53935","#FFB300","#2196F3","#43A047", "#FDD835", "#5E35B1", "#00ACC1"];
+
+// define the 1st line
+var valueline1 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.EastAsiaPacific); });
+var valueline2 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.EuropeCentralAsia); });
+var valueline3 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.LatinAmericaCaribbean); });
+var valueline4 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.MiddleEastNorthAfrica); });
+var valueline5 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.NorthAmerica); });
+var valueline6 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.SouthAsia); });
+var valueline7 = d3.line()
+    .x(function(d) { return x(d.Year); })
+    .y(function(d) { return y(d.SubSaharanAfrica); });
+
+g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("co2_region.csv", function(error, data) {
+  if (error) throw error;
+
+  console.log(data)
+
+  x.domain(data.map(function (d) { return d.Year; }));
+  y.domain([0, d3.max(data, function(d) {
+    return Math.max(d.EastAsiaPacific, 
+      d.EuropeCentralAsia,
+      d.LatinAmericaCaribbean,
+      d.MiddleEastNorthAfrica,
+      d.NorthAmerica,
+      d.SouthAsia,
+      d.SubSaharanAfrica); })]).nice();
+
+  console.log(y)
+
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[0])
+      .attr("d", valueline1);
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[1])
+      .attr("d", valueline2);
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[2])
+      .attr("d", valueline3);
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[3])
+      .attr("d", valueline4);
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[4])
+      .attr("d", valueline5);
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[5])
+      .attr("d", valueline6);
+  g.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", colorMap[6])
+      .attr("d", valueline7);
+
+  // Add the X Axis
+  g.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+
+  g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(null, "s"))
+    .append("text")
+      .attr("x", 2)
+      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("dy", "2em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .text("CO2 Emissions (kilotons)");
+});
+
+  var keys = ["EastAsiaPacific",
+  "EuropeCentralAsia",
+  "LatinAmericaCaribbean",
+  "MiddleEastNorthAfrica",
+  "NorthAmerica",
+  "SouthAsia",
+  "SubSaharanAfrica"]
+
+  var legend = g.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+      .selectAll("g")
+      .data(keys.slice().reverse())
+      .enter().append("g")
+        .attr("transform", function(d, i) { 
+          return "translate(0," + i * 20 + ")"; 
+      });
+
+  legend.append("rect")
+      .attr("x", 240)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", function(d,i) { return colorMap[i]; } );
+
+  legend.append("text")
+      .attr("x", 230)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .text(function(d,i) { 
+        switch (i) {
+          case 0: return "East Asia & Pacific";
+          case 1: return "Europe & Central Asia";
+          case 2: return "Latin America & Caribbean";
+          case 3: return "Middle East & North Africa";
+          case 4: return "North America";
+          case 5: return "South Asia";
+          case 6: return "Sub-Saharan Africa";
+        }
+      });
+
+
+</script>
+
 
 </body>
 </html>
