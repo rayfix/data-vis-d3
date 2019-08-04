@@ -47,18 +47,22 @@
 
 <div class="container"></div>
 
-<div id="chart" class="container text-center">
-  <svg width="960" height="500"></svg>
+<div class="container text-center">
+  <svg id="stage1" width="960" height="500"></svg>
+</div>
+
+<div class="container text-center">
+  <svg id="stage2" width="960" height="500"></svg>
 </div>
 
 <script>
 // create the svg
-var svg = d3.select("svg");
+var stage1 = d3.select("#stage1");
 var margin = {top: 20, right: 20, bottom: 30, left: 40}
-var width = svg.attr("width") - margin.left - margin.right;
-var height = svg.attr("height") - margin.top - margin.bottom;
+var width = stage1.attr("width") - margin.left - margin.right;
+var height = stage1.attr("height") - margin.top - margin.bottom;
 
-var g = svg.append("g").attr("transform", 
+var g = stage1.append("g").attr("transform", 
       "translate(" + margin.left + "," + margin.top + ")");
 
 // set x scale
@@ -130,7 +134,7 @@ d3.csv("co2_country.csv", function(d, i, columns) {
       .text("CO2 Emissions (kilotons)");
 }); // data load complete
 
-var tooltip = svg.append("g")
+var tooltip = stage1.append("g")
   .attr("class", "tooltip")
   .style("display", "none");
       
@@ -152,6 +156,15 @@ tooltip.append("text")
 <div class="container"></div>
 <div class="divider"></div>
 </div>
+
+<div class="divider"></div>
+
+<div class="text-center">
+<h3><a href="index.html"> Start Over </a></h3>
+</div>
+
+<div class="divider"></div>
+
 
 </body>
 </html>
