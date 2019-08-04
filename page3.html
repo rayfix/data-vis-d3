@@ -2,7 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+  <script src="https://d3js.org/d3.v4.min.js"></script>  
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<title>Addressing Climate Change</title>
   <style>
@@ -41,19 +41,24 @@
 
 <h1>CO<sub>2</sub> Emissions by Income Group</h1>
 
+
+If we look at the same chart but now distinguish between the income groups
+of countries producing in CO<sub>2</sub> emission there are some interesting
+trends.  You can mouse over the each to see the percentage contribution of
+each income group for a given year.
+
 </div>
 
 <div id="chart" class="container text-center">
   <svg width="960" height="500"></svg>
 </div>
 
-<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 // create the svg
 var svg = d3.select("svg");
 var margin = {top: 20, right: 20, bottom: 30, left: 40}
-var width = svg.attr("width") - margin.left - margin.right
-var height = svg.attr("height") - margin.top - margin.bottom
+var width = svg.attr("width") - margin.left - margin.right;
+var height = svg.attr("height") - margin.top - margin.bottom;
 
 var g = svg.append("g").attr("transform", 
       "translate(" + margin.left + "," + margin.top + ")");
@@ -102,11 +107,10 @@ d3.csv("co2_income.csv", function(d, i, columns) {
       .on("mouseover", function() { tooltip.style("display", null); })
       .on("mouseout", function() { tooltip.style("display", "none"); })
       .on("mousemove", function(d) {
-        console.log("MEOW");
         var xPosition = d3.mouse(this)[0] - 5;
-        var yPosition = d3.mouse(this)[1] - 5;
+        var yPosition = 100; //d3.mouse(this)[1] - 5;
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        tooltip.select("text").text("Meow");//(d[1]-d[0]);
+        tooltip.select("text").text((d[1]-d[0])/1000000);
       });
 
   g.append("g")
@@ -156,32 +160,38 @@ d3.csv("co2_income.csv", function(d, i, columns) {
           case 3: return "Low Income"                    
         }
       });
-});
+}); // data load complete
 
-  // Prep the tooltip bits, initial display is hidden
-  var tooltip = svg.append("g")
-    .attr("class", "tooltip");
-//    .style("display", "none");
+var tooltip = svg.append("g")
+  .attr("class", "tooltip")
+  .style("display", "none");
       
-  tooltip.append("rect")
-    .attr("width", 60)
-    .attr("height", 20)
-    .attr("fill", "white")
-    .style("opacity", 0.5);
+tooltip.append("rect")
+  .attr("width", 60)
+  .attr("height", 20)
+  .attr("fill", "white")
+  .style("opacity", 0.5);
 
-  tooltip.append("text")
-    .attr("x", 30)
-    .attr("dy", "1.2em")
-    .style("text-anchor", "middle")
-    .attr("font-size", "12px")
-    .attr("font-weight", "bold");
+tooltip.append("text")
+  .attr("x", 30)
+  .attr("dy", "1.2em")
+  .style("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .attr("font-weight", "bold");
 
 </script>
 
+<div class="container">
+
+The high income countries have had a relatively high but stable output. While economic activity is increasing, these richer nations also are able to implement the use of non-fossil fuel energy sources as well as save on higher efficiency technology.  Low income group nations, on the other hand, produce much smaller amounts of CO<sub>2</sub>.  Where we see the most gains are in middle with the lower-middle income nations and more pronounced int the higher-mid income nations. As we see nations rise out of poverty and become more affluent, carbon output is an expected effect.
+
+</div>
+
 <div class="divider"></div>
 
-
-
+<div class="text-center">
+<h3><a href="page4.html"> The Argument for a World Carbon Bank &gt;&gt;</a></h3>
+</div>
 
 <div class="divider"></div>
 
