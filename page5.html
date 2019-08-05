@@ -43,7 +43,8 @@
 <div class="divider"></div>
 <div class="container">
 
-<p>Looking at carbon emissions by country is useful because country borders, while being human constructs, represent policy boundaries of real consequence.  Use your mouse to discover the contribution of an individual country and click on it to reveal more detail.  You may see if you can find individual countries like China, India, Vietnam, Indonesia and Bangladesh.  They must play a role in solving the climate problem.</p>
+<p>Looking at carbon emissions by country is useful because country borders, while being human constructs, represent policy boundaries of real consequence.  Use your mouse reveal the country.  You may see if you can find individual countries like China, India, Vietnam, Indonesia and Bangladesh.  They must play a role in solving the climate problem.  How have they been developing over time?</p>
+
 </div>
 
 <div class="divider"></div>
@@ -54,10 +55,16 @@
 
 <div class="divider"></div>
 
+<!-- 
+
+In the future, allow the user to drill down.
+
 <div class="container text-center">
   <h2>Details<h2>
   <svg id="stage2" width="960" height="500"></svg>
-</div>
+</div> 
+
+-->
 
 <script>
 // create the svg
@@ -94,6 +101,22 @@ d3.csv("co2_country.csv", function(d, i, columns) {
 
   var keys = data.columns.slice(1);
 
+  var findCountryName = function(i, quant) {
+    
+    if (quant == 0) {
+      return "NA"
+    }
+
+    for (k in keys) {
+      var key = keys[k];
+      if (Math.abs(data[i][key] - quant) < 1) {
+        return key
+      }
+    }
+
+    return "--"
+  }
+
   x.domain(data.map(function(d) { return d.Year; }));
   y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
   z.domain(keys);
@@ -112,12 +135,13 @@ d3.csv("co2_country.csv", function(d, i, columns) {
       .attr("width", x.bandwidth())
       .on("mouseover", function() { tooltip.style("display", null); })
       .on("mouseout", function() { tooltip.style("display", "none"); })
-      .on("mousemove", function(d) {
+      .on("mousemove", function(d, i) {
         var xPosition = d3.mouse(this)[0] - 5;
         var yPosition = d3.mouse(this)[1] - 5;
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
         var gt = Math.round((d[1]-d[0])/100000) / 10 + " Gt"
-        tooltip.select("text").text(gt);
+        var countryName = findCountryName(i,d[1]-d[0])
+        tooltip.select("text").text(countryName + ", " + gt);
       });
 
   g.append("g")
@@ -144,13 +168,14 @@ var tooltip = stage1.append("g")
   .style("display", "none");
       
 tooltip.append("rect")
-  .attr("width", 60)
+  .attr("width", 150)
   .attr("height", 20)
   .attr("fill", "white")
   .style("opacity", 0.5);
 
 tooltip.append("text")
   .attr("x", 30)
+  .attr("dx", 30)
   .attr("dy", "1.2em")
   .style("text-anchor", "middle")
   .attr("font-size", "12px")
