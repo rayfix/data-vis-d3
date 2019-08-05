@@ -50,7 +50,7 @@
 <div class="divider"></div>
 
 <div class="container text-center">
-  <svg id="stage1" width="960" height="500"></svg>
+  <svg id="stage1" width="1024" height="500"></svg>
 </div>
 
 <div class="divider"></div>
@@ -69,7 +69,7 @@ In the future, allow the user to drill down.
 <script>
 // create the svg
 var stage1 = d3.select("#stage1");
-var margin = { top: 20, right: 20, bottom: 30, left: 40 }
+var margin = { top: 20, right: 50, bottom: 30, left: 40 }
 var width = stage1.attr("width") - margin.left - margin.right;
 var height = stage1.attr("height") - margin.top - margin.bottom;
 
@@ -168,14 +168,14 @@ var tooltip = stage1.append("g")
   .style("display", "none");
       
 tooltip.append("rect")
-  .attr("width", 150)
+  .attr("width", 130)
   .attr("height", 20)
   .attr("fill", "white")
   .style("opacity", 0.5);
 
 tooltip.append("text")
   .attr("x", 30)
-  .attr("dx", 30)
+  .attr("dx", 35)
   .attr("dy", "1.2em")
   .style("text-anchor", "middle")
   .attr("font-size", "12px")
