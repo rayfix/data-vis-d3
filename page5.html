@@ -43,7 +43,7 @@
 <div class="divider"></div>
 <div class="container">
 
-<p>Looking at carbon emissions by country is useful because country borders, while being human constructs, represent policy boundaries of real consequence.  Use your mouse to discover the contribution of an individual country and click on it to reveal more detail.  You may see if you can find individual countries like China, India, Vietnam, Indonesia and Bangladesh.  They will almost certainly play a critical role in controlling the climate crisis.</p>
+<p>Looking at carbon emissions by country is useful because country borders, while being human constructs, represent policy boundaries of real consequence.  Use your mouse to discover the contribution of an individual country and click on it to reveal more detail.  You may see if you can find individual countries like China, India, Vietnam, Indonesia and Bangladesh.  They must play a role in solving the climate problem.</p>
 </div>
 
 <div class="divider"></div>
@@ -62,7 +62,7 @@
 <script>
 // create the svg
 var stage1 = d3.select("#stage1");
-var margin = {top: 20, right: 20, bottom: 30, left: 40}
+var margin = { top: 20, right: 20, bottom: 30, left: 40 }
 var width = stage1.attr("width") - margin.left - margin.right;
 var height = stage1.attr("height") - margin.top - margin.bottom;
 
@@ -114,9 +114,10 @@ d3.csv("co2_country.csv", function(d, i, columns) {
       .on("mouseout", function() { tooltip.style("display", "none"); })
       .on("mousemove", function(d) {
         var xPosition = d3.mouse(this)[0] - 5;
-        var yPosition = 100; //d3.mouse(this)[1] - 5;
+        var yPosition = d3.mouse(this)[1] - 5;
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        tooltip.select("text").text((d[1]-d[0])/1000000);
+        var gt = Math.round((d[1]-d[0])/100000) / 10 + " Gt"
+        tooltip.select("text").text(gt);
       });
 
   g.append("g")
@@ -139,7 +140,7 @@ d3.csv("co2_country.csv", function(d, i, columns) {
 }); // data load complete
 
 var tooltip = stage1.append("g")
-  .attr("class", "tooltip")
+  .attr("class", "customtooltip")
   .style("display", "none");
       
 tooltip.append("rect")
