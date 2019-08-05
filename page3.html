@@ -9,9 +9,6 @@
   .divider{
     margin: 0cm 0cm 1cm 0cm;
   }
-  .bar {
-    fill: steelblue;
-  }
   </style>
 </head>
 <body>
@@ -44,8 +41,9 @@
 
 If we look at the same chart but now distinguish between the income groups
 of countries producing in CO<sub>2</sub> emission there are some interesting
-trends.  You can mouse over the each to see the percentage contribution of
-each income group for a given year.
+trends.  You can <b>mouse over</b> the each to see the number of gigatons of 
+CO<sub>2</sub> emission and  percentage contribution of each income group 
+for a given year.
 
 </div>
 
@@ -62,6 +60,24 @@ var height = svg.attr("height") - margin.top - margin.bottom;
 
 var g = svg.append("g").attr("transform", 
       "translate(" + margin.left + "," + margin.top + ")");
+
+var tooltip = svg.append("g")
+  .attr("class", "customtooltip")
+  .style("display", "none");
+      
+tooltip.append("rect")
+  .attr("width", 130)
+  .attr("height", 20)
+  .attr("fill", "white")
+  .style("opacity", 0.5);
+
+tooltip.append("text")
+  .attr("x", 30)
+  .attr("dx", 35)
+  .attr("dy", "1.2em")
+  .style("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .attr("font-weight", "bold");
 
 // set x scale
 var x = d3.scaleBand()
@@ -104,13 +120,16 @@ d3.csv("co2_income.csv", function(d, i, columns) {
       .attr("y", function(d) { return y(d[1]); })
       .attr("height", function(d) { return y(d[0]) - y(d[1]); })
       .attr("width", x.bandwidth())
-      .on("mouseover", function() { tooltip.style("display", null); })
+      .on("mouseover", function() { tooltip.style("display", "inline"); })
       .on("mouseout", function() { tooltip.style("display", "none"); })
-      .on("mousemove", function(d) {
-        var xPosition = d3.mouse(this)[0] - 5;
-        var yPosition = 100; //d3.mouse(this)[1] - 5;
+      .on("mousemove", function(d, i) {
+        var xPosition = Math.round(d3.mouse(this)[0] - 5);
+        var yPosition = Math.round(d3.mouse(this)[1] - 5);
+        console.log(d3.mouse(this))
         tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        tooltip.select("text").text((d[1]-d[0])/1000000);
+        var gt = Math.round((d[1]-d[0])/100000) / 10 + " Gt"
+        var ratio = Math.round((d[1]-d[0])/data[i].total * 1000) / 10 + "% of CO2";
+        tooltip.select("text").text(gt+","+ratio);
       });
 
   g.append("g")
@@ -162,22 +181,7 @@ d3.csv("co2_income.csv", function(d, i, columns) {
       });
 }); // data load complete
 
-var tooltip = svg.append("g")
-  .attr("class", "tooltip")
-  .style("display", "none");
-      
-tooltip.append("rect")
-  .attr("width", 60)
-  .attr("height", 20)
-  .attr("fill", "white")
-  .style("opacity", 0.5);
 
-tooltip.append("text")
-  .attr("x", 30)
-  .attr("dy", "1.2em")
-  .style("text-anchor", "middle")
-  .attr("font-size", "12px")
-  .attr("font-weight", "bold");
 
 </script>
 
